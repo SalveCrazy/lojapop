@@ -1,33 +1,50 @@
-import { useEffect, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
-import { api } from "../api/api.js";
-import { useCart } from "../contexts/CartProvider.jsx";
+// Arquivo: src/componentes/ProductCard.jsx
 
-export default function ProductDetails() {
-  const { id } = useParams();
-  const [produto, setProduto] = useState(null);
-  const { addToCart } = useCart();
+import React, { useContext } from "react";
+import { useNavigate } from "react-router-dom";
+import { CartContext } from "../contexts/CartProvider.jsx";
+
+export default function ProductCard({ product }) {
+  const { addToCart } = useContext(CartContext);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    api.get(`/products/${id}`).then(res => setProduto(res.data));
-  }, [  id]);
+  if (!product) return null; // segurança
 
-  if (!produto) return <p>Carregando...</p>;
+  const handleAddToCart = (e) => {
+    e.stopPropagation(); // impede abrir detalhes ao clicar no botão
+
+    addToCart(product);
+    console.log(`${product.title} adicionado ao carrinho!`);
+  };
 
   return (
-    <div className="p-4">
-      <img src={produto.image} className="h-60 mx-auto" />
-      <h1 className="text-2xl font-bold">{produto.title}</h1>
-      <p>{produto.description}</p>
-      <p className="text-xl font-bold">R$ {produto.price}</p>
+    <div
+      className="border rounded-lg p-4 shadow hover:shadow-xl transition cursor-pointer flex flex-col items-center bg-white"
+      onClick={() => navigate(`/produto/${product.id}`)}
+    >
+      {/* Imagem */}
+      <div className="w-full h-48 flex items-center justify-center mb-4">
+        <img
+          src={product.image}
+          alt={product.title}
+          className="h-full object-contain"
+        />
+      </div>
 
-      <button 
-        className="bg-black text-white px-4 py-2 mt-3"
-        onClick={() => {
-          addToCart(produto);
-          navigate("/carrinho");
-        }}
+      {/* Título */}
+      <h2 className="text-lg font-semibold text-center mb-2 line-clamp-2 px-2">
+        {product.title}
+      </h2>
+
+      {/* Preço */}
+      <p className="text-xl font-bold text-gray-900 mb-3">
+        R$ {product.price?.toFixed(2)}
+      </p>
+
+      {/* Botão */}
+      <button
+        onClick={handleAddToCart}
+        className="bg-blue-600 text-white w-full py-2 rounded-lg hover:bg-blue-700 transition"
       >
         Adicionar ao Carrinho
       </button>

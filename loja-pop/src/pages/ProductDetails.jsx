@@ -13,7 +13,7 @@ export default function ProductDetails() {
     api.get(`/products/${id}`).then(res => setProduto(res.data));
   }, [  id]);
 
-  if (!produto) return <p>Carregando... </p>;
+  if (!produto) return <p>.</p>;
 
   return (
     <div className="p-4">
