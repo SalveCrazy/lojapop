@@ -1,12 +1,12 @@
-import { useEffect, useState, useContext } from "react";
+import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { api } from "../api/api";
-import { CartContext } from "../contexts/CartContext";
+import { api } from "../api/api.js";
+import { useCart } from "../contexts/CartProvider.jsx";
 
 export default function ProductDetails() {
   const { id } = useParams();
   const [produto, setProduto] = useState(null);
-  const { addToCart } = useContext(CartContext);
+  const { addToCart } = useCart();
   const navigate = useNavigate();
 
   useEffect(() => {

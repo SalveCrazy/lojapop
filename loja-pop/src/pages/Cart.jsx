@@ -1,11 +1,11 @@
 import { useContext } from "react";
-import { CartContext } from "../contexts/CartContext";
 import { AuthContext } from "../contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
+import { useCart } from "../contexts/CartProvider";
 
 
 export default function Cart() {
-const { cart } = useContext(CartContext);
+const { cart } = useCart();
 const { user } = useContext(AuthContext);
 const navigate = useNavigate();
 
